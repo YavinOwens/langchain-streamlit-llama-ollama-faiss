@@ -4,6 +4,7 @@ Optimized for Mac M2 with Metal GPU acceleration.
 """
 
 import os
+from pathlib import Path
 import time
 import re
 from typing import List, Dict, Any, Optional

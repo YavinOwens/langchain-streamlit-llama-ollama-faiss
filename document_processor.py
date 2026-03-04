@@ -21,6 +21,8 @@ from langchain_community.document_loaders import (
     UnstructuredPowerPointLoader,
     UnstructuredImageLoader
 )
+import os
+from pathlib import Path
 try:
     from youtube_transcript_api import YouTubeTranscriptApi
     import yt_dlp
@@ -676,7 +678,7 @@ Answer:"""
             documents = self.load_document(tmp_file_path, file_type)
             if not documents:
                 st.error("❌ No documents loaded")
-                os.unlink(tmp_file_path)
+                Path(tmp_file_path).unlink()
                 return False
             
             st.info(f"📋 Loaded {len(documents)} document(s)")
@@ -685,7 +687,7 @@ Answer:"""
             chunks = self.split_documents(documents)
             if not chunks:
                 st.error("❌ No chunks created")
-                os.unlink(tmp_file_path)
+                Path(tmp_file_path).unlink()
                 return False
             
             st.info(f"🔢 Created {len(chunks)} chunks")
@@ -706,7 +708,7 @@ Answer:"""
                     success = False
             
             # Clean up temporary file
-            os.unlink(tmp_file_path)
+            Path(tmp_file_path).unlink()
             
             if success:
                 self.processed_files.append({
