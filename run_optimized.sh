@@ -25,15 +25,50 @@ if [ ! -d "venv" ]; then
 fi
 
 # Activate virtual environment
-source venv/bin/activate
+if [ -d "venv" ]; then
+    echo "🔧 Activating virtual environment..."
+    source venv/bin/activate
+    echo "✅ Virtual environment activated"
+else
+    echo "❌ Virtual environment not found"
+    exit 1
+fi
+
+# Check if requirements.txt has changed since last installation
+if [ -f ".deps_installed" ] && [ -f "requirements.txt" ]; then
+    if [ "requirements.txt" -nt ".deps_installed" ]; then
+        echo "📝 Requirements.txt has changed, reinstalling dependencies..."
+        rm -f .deps_installed
+    fi
+fi
 
 # Install dependencies if needed
 if [ ! -f ".deps_installed" ]; then
     echo "📥 Installing dependencies..."
-    pip install -r requirements.txt
-    touch .deps_installed
+    if pip install -r requirements.txt; then
+        touch .deps_installed
+        echo "✅ Dependencies installed successfully"
+    else
+        echo "❌ Failed to install dependencies"
+        exit 1
+    fi
+else
+    echo "✅ Dependencies already installed"
 fi
 
 # Run Streamlit with optimized settings
 echo "🦙 Starting Streamlit app..."
-streamlit run app.py --server.port=8501 --server.address=localhost
+
+# Check if streamlit is available
+if ! command -v streamlit &> /dev/null; then
+    echo "❌ Streamlit not found. Installing..."
+    pip install streamlit
+fi
+
+# Run the app
+if streamlit run app.py --server.port=8501 --server.address=localhost; then
+    echo "🎉 Application started successfully!"
+else
+    echo "❌ Failed to start application"
+    exit 1
+fi
