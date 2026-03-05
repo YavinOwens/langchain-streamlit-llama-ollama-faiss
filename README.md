@@ -35,7 +35,8 @@ Everything runs on your machine using Ollama. No data leaves your system, no API
 
 ```bash
 # Clone and dive in
-cd /Users/ymo/Yavin_Profile/llama_streamlit/CascadeProjects/windsurf-project
+git clone <repository-url>
+cd <project-directory>
 python -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
