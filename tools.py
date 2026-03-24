@@ -19,10 +19,12 @@ def multiply(x: int, y: int) -> int:
     """Multiply two numbers together."""
     return x * y
 
+
 @tool
 def add(x: int, y: int) -> int:
     """Add two numbers together."""
     return x + y
+
 
 @tool
 def divide(x: float, y: float) -> float:
@@ -31,13 +33,15 @@ def divide(x: float, y: float) -> float:
         return "Error: Cannot divide by zero"
     return x / y
 
+
 @tool
 def power(x: float, y: float) -> float:
     """Calculate x raised to the power of y."""
     try:
         return x ** y
-    except:
+    except BaseException:
         return "Error: Invalid calculation"
+
 
 @tool
 def square_root(x: float) -> float:
@@ -54,10 +58,12 @@ def word_count(text: str) -> int:
     words = text.split()
     return len(words)
 
+
 @tool
 def character_count(text: str) -> int:
     """Count the number of characters in a text string."""
     return len(text)
+
 
 @tool
 def extract_emails(text: str) -> List[str]:
@@ -66,6 +72,7 @@ def extract_emails(text: str) -> List[str]:
     emails = re.findall(email_pattern, text)
     return emails
 
+
 @tool
 def extract_urls(text: str) -> List[str]:
     """Extract all URLs from a text string."""
@@ -73,10 +80,12 @@ def extract_urls(text: str) -> List[str]:
     urls = re.findall(url_pattern, text)
     return urls
 
+
 @tool
 def to_uppercase(text: str) -> str:
     """Convert text to uppercase."""
     return text.upper()
+
 
 @tool
 def to_lowercase(text: str) -> str:
@@ -90,15 +99,17 @@ def get_current_time() -> str:
     """Get the current date and time."""
     return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
+
 @tool
 def get_current_date() -> str:
     """Get the current date."""
     return datetime.date.today().strftime("%Y-%m-%d")
 
+
 @tool
 def calculate_age(birth_date: str) -> int:
     """
-    Calculate age from birth date. 
+    Calculate age from birth date.
     Args:
         birth_date: Date in YYYY-MM-DD format
     """
@@ -107,8 +118,9 @@ def calculate_age(birth_date: str) -> int:
         today = datetime.date.today()
         age = today.year - birth.year - ((today.month, today.day) < (birth.month, birth.day))
         return age
-    except:
+    except BaseException:
         return "Error: Invalid date format. Use YYYY-MM-DD"
+
 
 @tool
 def days_until_date(target_date: str) -> int:
@@ -122,7 +134,7 @@ def days_until_date(target_date: str) -> int:
         today = datetime.date.today()
         delta = target - today
         return delta.days
-    except:
+    except BaseException:
         return "Error: Invalid date format. Use YYYY-MM-DD"
 
 
@@ -143,33 +155,34 @@ def web_search(query: str) -> str:
             'no_html': 1,
             'skip_disambig': 1
         }
-        
+
         response = requests.get(url, params=params, timeout=10)
         if response.status_code == 200:
             data = response.json()
-            
+
             # Extract relevant information
             results = []
-            
+
             # Abstract (instant answer)
             if data.get('Abstract'):
                 results.append(f"Answer: {data['Abstract']}")
-            
+
             # Related topics
             if data.get('RelatedTopics'):
                 for topic in data['RelatedTopics'][:3]:  # Limit to top 3
                     if topic.get('Text'):
                         results.append(f"• {topic['Text']}")
-            
+
             if not results:
                 return f"No results found for: {query}"
-            
+
             return "\n".join(results)
         else:
             return f"Search failed with status: {response.status_code}"
-            
+
     except Exception as e:
         return f"Search error: {str(e)}"
+
 
 @tool
 def get_weather(location: str) -> str:
@@ -190,27 +203,32 @@ def get_weather(location: str) -> str:
 @tool
 def celsius_to_fahrenheit(celsius: float) -> float:
     """Convert Celsius to Fahrenheit."""
-    return (celsius * 9/5) + 32
+    return (celsius * 9 / 5) + 32
+
 
 @tool
 def fahrenheit_to_celsius(fahrenheit: float) -> float:
     """Convert Fahrenheit to Celsius."""
-    return (fahrenheit - 32) * 5/9
+    return (fahrenheit - 32) * 5 / 9
+
 
 @tool
 def meters_to_feet(meters: float) -> float:
     """Convert meters to feet."""
     return meters * 3.28084
 
+
 @tool
 def feet_to_meters(feet: float) -> float:
     """Convert feet to meters."""
     return feet / 3.28084
 
+
 @tool
 def kilograms_to_pounds(kg: float) -> float:
     """Convert kilograms to pounds."""
     return kg * 2.20462
+
 
 @tool
 def pounds_to_kilograms(pounds: float) -> float:
@@ -236,6 +254,7 @@ def calculate_tip(bill_amount: float, tip_percentage: float) -> Dict[str, float]
         "total": round(total, 2)
     }
 
+
 @tool
 def bmi_calculator(weight_kg: float, height_m: float) -> Dict[str, Any]:
     """
@@ -246,9 +265,9 @@ def bmi_calculator(weight_kg: float, height_m: float) -> Dict[str, Any]:
     """
     if height_m == 0:
         return {"error": "Height cannot be zero"}
-    
+
     bmi = weight_kg / (height_m ** 2)
-    
+
     # BMI categories
     if bmi < 18.5:
         category = "Underweight"
@@ -258,13 +277,14 @@ def bmi_calculator(weight_kg: float, height_m: float) -> Dict[str, Any]:
         category = "Overweight"
     else:
         category = "Obese"
-    
+
     return {
         "weight_kg": weight_kg,
         "height_m": height_m,
         "bmi": round(bmi, 2),
         "category": category
     }
+
 
 @tool
 def json_formatter(text: str) -> str:
@@ -277,11 +297,11 @@ def json_formatter(text: str) -> str:
         # Try to parse as JSON first
         parsed = json.loads(text)
         return json.dumps(parsed, indent=2)
-    except:
+    except BaseException:
         # Try to create JSON from plain text
         try:
             return json.dumps({"text": text}, indent=2)
-        except:
+        except BaseException:
             return "Error: Cannot format text as JSON"
 
 
@@ -290,8 +310,8 @@ MATH_TOOLS = [multiply, add, divide, power, square_root]
 TEXT_TOOLS = [word_count, character_count, extract_emails, extract_urls, to_uppercase, to_lowercase]
 DATE_TOOLS = [get_current_time, get_current_date, calculate_age, days_until_date]
 WEB_TOOLS = [web_search, get_weather]
-CONVERSION_TOOLS = [celsius_to_fahrenheit, fahrenheit_to_celsius, meters_to_feet, feet_to_meters, 
-                   kilograms_to_pounds, pounds_to_kilograms]
+CONVERSION_TOOLS = [celsius_to_fahrenheit, fahrenheit_to_celsius, meters_to_feet, feet_to_meters,
+                    kilograms_to_pounds, pounds_to_kilograms]
 UTILITY_TOOLS = [calculate_tip, bmi_calculator, json_formatter]
 
 # All available tools
